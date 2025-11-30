@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForensicLab - Cybersecurity Training Platform</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>ForensicLab</h1>
+                <p>Cybersecurity Training Platform</p>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <div class="role-toggle">
+                <button class="role-btn active" data-role="student">Student</button>
+                <button class="role-btn" data-role="faculty">Faculty</button>
+            </div>
+            <button class="btn" id="loginBtn">Login</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="container hidden">
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="logo-text">ForensicLab</div>
+            </div>
+            <a href="#" class="nav-item active" data-view="dashboard">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="#" class="nav-item" data-view="scenarios">
+                <i class="fas fa-virus"></i> Forensic Scenarios
+            </a>
+            <a href="#" class="nav-item" data-view="labs">
+                <i class="fas fa-flask"></i> Analysis Labs
+            </a>
+            <a href="#" class="nav-item instructor-only hidden" data-view="instructor">
+                <i class="fas fa-chalkboard-teacher"></i> Instructor Panel
+            </a>
+            <a href="#" class="nav-item" data-view="profile">
+                <i class="fas fa-user"></i> Profile
+            </a>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <div class="welcome-text">
+                    <h2>Welcome back, <span id="userName">Alex Johnson</span>!</h2>
+                    <p>Your cybersecurity training dashboard</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">AJ</div>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard View -->
+            <div id="dashboardView">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: rgba(37, 99, 235, 0.1); color: var(--primary);">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <h3 class="card-title">Active Labs</h3>
+                        </div>
+                        <p>You have 3 forensic labs in progress</p>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">In Progress</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">7</div>
+                                <div class="stat-label">Completed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: rgba(139, 92, 246, 0.1); color: var(--accent);">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3 class="card-title">Learning Progress</h3>
+                        </div>
+                        <p>Complete all scenarios to earn certification</p>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">65%</div>
+                                <div class="stat-label">Overall</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">4</div>
+                                <div class="stat-label">Scenarios</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card instructor-only hidden">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="card-title">Student Performance</h3>
+                        </div>
+                        <p>Monitor your class progress</p>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Students</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">82%</div>
+                                <div class="stat-label">Avg. Score</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Recent Scenarios</h3>
+                <div class="scenario-grid">
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <h3 class="scenario-title">Phishing Attack Analysis</h3>
+                            <span class="scenario-difficulty">Intermediate</span>
+                        </div>
+                        <div class="scenario-content">
+                            <p class="scenario-description">Analyze a simulated phishing email and identify malicious
+                                elements, sender information, and embedded links.</p>
+                            <div class="scenario-actions">
+                                <button class="btn-outline">Start Lab</button>
+                                <button class="btn-outline btn-danger">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <h3 class="scenario-title">Malware Infection Forensics</h3>
+                            <span class="scenario-difficulty">Advanced</span>
+                        </div>
+                        <div class="scenario-content">
+                            <p class="scenario-description">Investigate a system infected with malware, analyze registry
+                                changes, and identify persistence mechanisms.</p>
+                            <div class="scenario-actions">
+                                <button class="btn-outline">Start Lab</button>
+                                <button class="btn-outline btn-danger">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scenarios View -->
+            <div id="scenariosView" class="hidden">
+                <h2>Forensic Scenarios</h2>
+                <p>Real-world cybersecurity incidents to investigate</p>
+                <div class="scenario-grid" style="margin-top: 20px;">
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <h3 class="scenario-title">Data Breach Investigation</h3>
+                            <span class="scenario-difficulty">Advanced</span>
+                        </div>
+                        <div class="scenario-content">
+                            <p class="scenario-description">Analyze logs from a simulated data breach to identify
+                                compromised data, attack vectors, and exfiltration methods.</p>
+                            <div class="scenario-actions">
+                                <button class="btn-outline">Start Lab</button>
+                                <button class="btn-outline btn-danger">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <h3 class="scenario-title">Ransomware Analysis</h3>
+                            <span class="scenario-difficulty">Expert</span>
+                        </div>
+                        <div class="scenario-content">
+                            <p class="scenario-description">Investigate a ransomware attack, analyze encrypted files,
+                                and attempt recovery without paying the ransom.</p>
+                            <div class="scenario-actions">
+                                <button class="btn-outline">Start Lab</button>
+                                <button class="btn-outline btn-danger">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-card">
+                        <div class="scenario-header">
+                            <h3 class="scenario-title">Network Traffic Analysis</h3>
+                            <span class="scenario-difficulty">Intermediate</span>
+                        </div>
+                        <div class="scenario-content">
+                            <p class="scenario-description">Examine captured network traffic to identify
+                                command-and-control communications and data exfiltration.</p>
+                            <div class="scenario-actions">
+                                <button class="btn-outline">Start Lab</button>
+                                <button class="btn-outline btn-danger">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Labs View -->
+            <div id="labsView" class="hidden">
+                <div class="lab-header">
+                    <div>
+                        <h2>Phishing Attack Analysis</h2>
+                        <p>Forensic Lab #1 | Difficulty: Intermediate</p>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-avatar">AJ</div>
+                    </div>
+                </div>
+
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dot dot-red"></div>
+                        <div class="terminal-dot dot-yellow"></div>
+                        <div class="terminal-dot dot-green"></div>
+                    </div>
+                    <div class="terminal-content" id="terminalOutput">
+                        <!-- Dynamically populated by JS -->
+                    </div>
+                </div>
+
+                <div class="lab-actions">
+                    <button class="btn" id="submitLab">Submit for Grading</button>
+                    <button class="btn-outline" id="saveLab">Save Progress</button>
+                    <button class="btn-outline btn-danger" id="resetLab">Reset Lab</button>
+                </div>
+            </div>
+
+            <!-- Instructor Panel -->
+            <div id="instructorView" class="hidden">
+                <h2>Instructor Dashboard</h2>
+                <p>Manage labs and track student performance</p>
+
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="labSelect">Select Lab</label>
+                        <select id="labSelect">
+                            <option>Phishing Attack Analysis</option>
+                            <option>Data Breach Investigation</option>
+                            <option>Malware Infection Forensics</option>
+                            <option>Ransomware Analysis</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="classSelect">Select Class</label>
+                        <select id="classSelect">
+                            <option>Cybersecurity 101</option>
+                            <option>Advanced Forensics</option>
+                            <option>Digital Evidence</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFilter">Date Range</label>
+                        <input type="text" id="dateFilter" placeholder="Last 30 days" value="Last 30 days">
+                    </div>
+                </div>
+
+                <h3>Student Performance</h3>
+                <div class="performance-grid" id="studentPerformance">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Profile View -->
+            <div id="profileView" class="hidden">
+                <h2>Profile Settings</h2>
+                <div class="card" style="margin-top: 20px;">
+                    <div class="input-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" value="Alex Johnson">
+                    </div>
+                    <div class="input-group">
+                        <label for="emailProfile">Email</label>
+                        <input type="email" id="emailProfile" value="alex.johnson@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="roleProfile">Role</label>
+                        <input type="text" id="roleProfile" value="Student" readonly>
+                    </div>
+                    <div class="input-group">
+                        <label for="institution">Institution</label>
+                        <input type="text" id="institution" value="Cybersecurity Institute">
+                    </div>
+                    <button class="btn" id="saveProfile">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
