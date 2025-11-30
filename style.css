@@ -39,7 +39,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background:
+    background: 
         radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.1) 0%, transparent 20%),
         radial-gradient(circle at 90% 80%, rgba(114, 9, 183, 0.1) 0%, transparent 20%),
         linear-gradient(125deg, #0a0a1a 0%, #0f0f23 100%);
@@ -54,8 +54,8 @@ body::after {
     left: 0;
     width: 200%;
     height: 200%;
-    background:
-        radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background: 
+        radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     z-index: -1;
     opacity: 0.6;
@@ -63,13 +63,8 @@ body::after {
 }
 
 @keyframes drift {
-    from {
-        transform: translate(0, 0);
-    }
-
-    to {
-        transform: translate(-40px, -40px);
-    }
+    from { transform: translate(0, 0); }
+    to { transform: translate(-40px, -40px); }
 }
 
 .container {
@@ -118,13 +113,8 @@ body::after {
 }
 
 @keyframes borderRotate {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .login-header {
@@ -295,8 +285,7 @@ body::after {
     font-size: 16px;
 }
 
-.nav-item:hover,
-.nav-item.active {
+.nav-item:hover, .nav-item.active {
     background: rgba(67, 97, 238, 0.2);
     color: white;
     border-left: 4px solid var(--primary);
@@ -465,8 +454,8 @@ body::after {
     left: -50%;
     width: 200%;
     height: 200%;
-    background:
-        radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+    background: 
+        radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px);
     background-size: 30px 30px;
     opacity: 0.3;
 }
@@ -593,8 +582,7 @@ body::after {
     color: var(--text);
 }
 
-.filter-group select,
-.filter-group input {
+.filter-group select, .filter-group input {
     padding: 13px 15px;
     background: rgba(20, 20, 45, 0.6);
     border: 1px solid rgba(100, 100, 255, 0.3);
@@ -660,7 +648,7 @@ body::after {
     .container {
         flex-direction: column;
     }
-
+    
     .sidebar {
         width: 100%;
         flex-direction: row;
@@ -669,18 +657,18 @@ body::after {
         height: auto;
         position: relative;
     }
-
+    
     .nav-item {
         min-width: 130px;
         justify-content: center;
         text-align: center;
         font-size: 14px;
     }
-
+    
     .main-content {
         padding: 25px 20px;
     }
-
+    
     .header {
         flex-direction: column;
         align-items: flex-start;
