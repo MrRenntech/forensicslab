@@ -1,0 +1,11 @@
+{
+    "name": "forensic-lab-platform",
+    "version": "1.0.0",
+    "description": "Educational Cyber Forensic Lab Platform",
+    "main": "index.html",
+    "scripts": {
+        "start": "serve ."
+    },
+    "dependencies": {},
+    "devDependencies": {}
+}

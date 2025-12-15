@@ -1,137 +1,52 @@
-// DOM Elements
-const loginScreen = document.getElementById('loginScreen');
-const dashboard = document.getElementById('dashboard');
-const loginBtn = document.getElementById('loginBtn');
-const logoutBtn = document.getElementById('logoutBtn');
-const roleBtns = document.querySelectorAll('.role-btn');
-const navItems = document.querySelectorAll('.nav-item');
-const studentOnly = document.querySelectorAll('.student-only');
-const instructorOnly = document.querySelectorAll('.instructor-only');
+// ============================================
+// FORENSIC LAB - FRONTEND CONTROLLER
+// ============================================
 
-// Explicitly define views for stability
+// --- View State Management ---
 const viewContainers = [
-    document.getElementById('dashboardView'),
-    document.getElementById('scenariosView'),
-    document.getElementById('labsView'),
-    document.getElementById('instructorView'),
-    document.getElementById('studentProfileView'),
-    document.getElementById('facultyProfileView')
+    'loginScreen',
+    'dashboardView',
+    'scenariosView',
+    'labsView',
+    'instructorView',
+    'studentProfileView',
+    'facultyProfileView'
 ];
 
-// Helper to hide all views
+/**
+ * Hides all main view containers.
+ */
 function hideAllViews() {
-    viewContainers.forEach(container => {
-        if (container) {
-            container.classList.add('hidden');
-        }
+    viewContainers.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
     });
 }
 
-const userNameSpan = document.getElementById('userName');
-const terminalOutput = document.getElementById('terminalOutput');
-const studentPerformance = document.getElementById('studentPerformance');
+// --- Global User State ---
+let currentUser = null; // Populated after login
 
-// Current user state
-let currentUser = {
-    name: "Alex Johnson",
-    role: "student",
-    email: "alex.johnson@example.com"
-};
-
-// Initialize terminal content
-function initTerminal() {
-    terminalOutput.innerHTML = `
-        <div>> Analyze the email headers to identify the true sender</div>
-        <div class="output">Received: from mail.server.com (192.168.1.100)</div>
-        <div class="output">by forensiclab.local (10.0.0.5) with ESMTPS</div>
-        <div class="output">Return-Path: &lt;attacker@malicious.com&gt;</div>
-        <div class="output">Received-SPF: fail (domain of attacker@malicious.com</div>
-        <div class="output">does not designate 192.168.1.100 as permitted sender)</div>
-        <div class="output"></div>
-        <div>> Extract and analyze embedded links</div>
-        <div class="output">Found 3 links:</div>
-        <div class="output">1. https://legit-site.com/login (redirects to phishing page)</div>
-        <div class="output">2. https://malicious.com/download.exe (malware payload)</div>
-        <div class="output">3. https://legit-site.com/help (legitimate)</div>
-        <div class="output"></div>
-        <div>> Calculate SHA256 hash of suspicious attachment</div>
-        <div class="output">SHA256: a1b2c3d4e5f6...</div>
-        <div class="output">VirusTotal match: 42/60 engines detected as malware</div>
-    `;
-}
-
-// Initialize student performance
-function initStudentPerformance() {
-    studentPerformance.innerHTML = `
-        <div class="student-card">
-            <div class="student-header">
-                <div class="student-avatar">MS</div>
-                <div>
-                    <div class="student-name">Maria Sanchez</div>
-                    <div>Phishing Lab</div>
-                </div>
-            </div>
-            <div>Score: 92%</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: 92%"></div>
-            </div>
-            <div class="student-stats">
-                <div>Completed: Dec 1, 2025</div>
-                <div>Status: <span style="color: var(--success);">Graded</span></div>
-            </div>
-        </div>
-        
-        <div class="student-card">
-            <div class="student-header">
-                <div class="student-avatar">TJ</div>
-                <div>
-                    <div class="student-name">Thomas Johnson</div>
-                    <div>Phishing Lab</div>
-                </div>
-            </div>
-            <div>Score: 78%</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: 78%"></div>
-            </div>
-            <div class="student-stats">
-                <div>Completed: Nov 28, 2025</div>
-                <div>Status: <span style="color: var(--warning);">Needs Review</span></div>
-            </div>
-        </div>
-        
-        <div class="student-card">
-            <div class="student-header">
-                <div class="student-avatar">AK</div>
-                <div>
-                    <div class="student-name">Aisha Khan</div>
-                    <div>Phishing Lab</div>
-                </div>
-            </div>
-            <div>Score: 100%</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: 100%"></div>
-            </div>
-            <div class="student-stats">
-                <div>Completed: Dec 1, 2025</div>
-                <div>Status: <span style="color: var(--success);">Graded</span></div>
-            </div>
-        </div>
-    `;
-}
-
-// Role selection
+// --- Login & Authentication Logic ---
+const loginBtn = document.getElementById('loginBtn');
+const loginScreen = document.getElementById('loginScreen');
+const roleBtns = document.querySelectorAll('.role-btn');
 const studentInputs = document.getElementById('studentInputs');
 const facultyInputs = document.getElementById('facultyInputs');
 
+let selectedRole = 'student'; // Default
+
+// Toggle input fields based on Role Selection (Buttons)
 roleBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-        // Toggle active button
+        // Update visual state
         roleBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
-        // Toggle Input Fields
-        const role = btn.dataset.role;
-        if (role === 'student') {
+        // Update logic state
+        selectedRole = btn.getAttribute('data-role'); // 'student' or 'faculty'
+
+        // Toggle Views
+        if (selectedRole === 'student') {
             studentInputs.classList.remove('hidden');
             facultyInputs.classList.add('hidden');
         } else {
@@ -141,222 +56,392 @@ roleBtns.forEach(btn => {
     });
 });
 
-// Login functionality
-loginBtn.addEventListener('click', () => {
-    const selectedRole = document.querySelector('.role-btn.active').dataset.role;
-    let isValid = false;
-    let name = "";
+// Handle Login Event
+if (loginBtn) {
+    loginBtn.addEventListener('click', async () => {
+        // 1. Simulate API Call
+        const originalText = loginBtn.textContent;
+        loginBtn.textContent = 'Authenticating...';
 
-    // Validate based on role
-    if (selectedRole === 'student') {
-        const email = document.getElementById('studentEmail').value;
-        const pass = document.getElementById('studentPass').value;
-        if (email && pass) {
-            isValid = true;
-            name = "Alex Johnson"; // Hardcoded for demo
+        try {
+            const response = await ApiService.login(selectedRole);
+
+            if (response.success) {
+                currentUser = response.user;
+
+                // 2. Update UI with User Data
+                updateUserProfileUI(currentUser);
+
+                // 3. Handle Role-Based Routing
+                hideAllViews();
+                if (loginScreen) loginScreen.classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden'); // Unhide Main Wrapper
+                document.querySelector('.top-nav').classList.remove('hidden');
+
+                if (currentUser.role === 'faculty') {
+                    // Faculty Flow
+                    document.getElementById('instructorView').classList.remove('hidden');
+                    document.querySelectorAll('.student-only').forEach(el => el.style.display = 'none');
+                    document.querySelectorAll('.instructor-only').forEach(el => el.style.display = 'inline-block');
+
+                    // Load Faculty Data
+                    loadInstructorDashboard();
+                } else {
+                    // Student Flow
+                    document.getElementById('dashboardView').classList.remove('hidden');
+                    document.querySelectorAll('.instructor-only').forEach(el => el.style.display = 'none');
+                    document.querySelectorAll('.student-only').forEach(el => el.style.display = 'inline-block');
+                }
+                initTerminal();
+            } else {
+                alert("Login Failed: " + response.message);
+            }
+        } catch (err) {
+            console.error("Login Script Error:", err);
+            // alert("System Error: " + err.message); // Silenced for smooth UX
+        } finally {
+            loginBtn.textContent = originalText;
         }
-    } else {
-        const id = document.getElementById('facultyId').value;
-        const code = document.getElementById('accessCode').value;
-        if (id && code) {
-            isValid = true;
-            name = "Dr. Sarah Connor"; // Hardcoded for demo
-        }
+    });
+}
+
+/**
+ * Updates the Top Nav and Profile views with the current user's info.
+ */
+function updateUserProfileUI(user) {
+    // Top Nav
+    const nameDisplay = document.getElementById('userName');
+    const roleDisplay = document.getElementById('userRoleDisplay');
+    const profileInitial = document.querySelector('.avatar');
+
+    if (nameDisplay) nameDisplay.textContent = user.name;
+    if (roleDisplay) roleDisplay.textContent = user.role === 'student' ? 'Student Dashboard' : 'Instructor Console';
+    if (profileInitial) profileInitial.textContent = user.avatar;
+
+    // Student Profile Inputs
+    if (user.role === 'student') {
+        const pName = document.getElementById('profileName');
+        const pEmail = document.getElementById('profileEmail');
+        if (pName) pName.value = user.name;
+        if (pEmail) pEmail.value = user.email;
+    }
+}
+
+/**
+ * Loads data for the Faculty Dashboard (Stats, Students, Profile).
+ */
+async function loadInstructorDashboard() {
+    // 1. Load Analytics Cards
+    const stats = await ApiService.getDashboardStats();
+    if (document.getElementById('statTotalStudents')) document.getElementById('statTotalStudents').textContent = stats.totalStudents;
+    if (document.getElementById('statAvgScore')) document.getElementById('statAvgScore').textContent = stats.avgScore + '%';
+    if (document.getElementById('statPendingReviews')) document.getElementById('statPendingReviews').textContent = stats.pendingReviews;
+    if (document.getElementById('statActiveAlerts')) document.getElementById('statActiveAlerts').textContent = stats.activeAlerts;
+
+    // 2. Load Student Performance Table
+    const students = await ApiService.getStudentPerformance();
+    const tbody = document.getElementById('studentTableBody');
+    if (tbody) {
+        tbody.innerHTML = students.map(s => `
+            <tr>
+                <td>${s.name}</td>
+                <td>${s.id}</td>
+                <td>${s.completed}/8</td>
+                <td>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${s.score}%"></div>
+                    </div>
+                </td>
+                <td><span class="status-badge status-${s.status.toLowerCase()}">${s.status}</span></td>
+            </tr>
+        `).join('');
     }
 
-    if (isValid) {
-        currentUser.role = selectedRole;
-        currentUser.name = name;
-        userNameSpan.textContent = currentUser.name;
+    // 3. Load Faculty Profile Data
+    populateFacultyProfile(currentUser);
+}
 
-        // Update Role Display Line
-        const roleDisplay = document.getElementById('userRoleDisplay');
-        if (roleDisplay) {
-            roleDisplay.textContent = selectedRole === 'student' ? 'Student Dashboard' : 'Instructor Access Terminal';
-        }
+/**
+ * Populates the Faculty Profile View with data.
+ */
+async function populateFacultyProfile(user) {
+    if (document.getElementById('facName')) document.getElementById('facName').value = user.name;
+    if (document.getElementById('facDept')) document.getElementById('facDept').value = user.department;
+    if (document.getElementById('facExpertise')) document.getElementById('facExpertise').value = user.expertise;
 
-        // Handle View Visibility
-        if (currentUser.role === 'faculty') {
-            // Show instructor-only items
-            instructorOnly.forEach(el => el.classList.remove('hidden'));
-            // Hide separate student nav items
-            studentOnly.forEach(el => el.classList.add('hidden'));
-
-            // Redirect straight to Instructor Panel
-            hideAllViews();
-            document.getElementById('instructorView').classList.remove('hidden');
-
-            // Update active nav
-            navItems.forEach(i => i.classList.remove('active'));
-            const instrNav = document.querySelector('[data-view="instructor"]');
-            if (instrNav) instrNav.classList.add('active');
-
-        } else {
-            // Student View
-            instructorOnly.forEach(el => el.classList.add('hidden'));
-            // Show student nav items
-            studentOnly.forEach(el => el.classList.remove('hidden'));
-
-            // Redirect to Standard Dashboard
-            hideAllViews();
-            document.getElementById('dashboardView').classList.remove('hidden');
-
-            navItems.forEach(i => i.classList.remove('active'));
-            navItems[0].classList.add('active');
-        }
-
-        loginScreen.classList.add('hidden');
-        dashboard.classList.remove('hidden');
-        initTerminal();
-        initStudentPerformance();
-    } else {
-        alert('Please enter valid credentials.');
+    // Load Courses
+    const courseList = document.getElementById('courseList');
+    if (courseList && user.courses) {
+        courseList.innerHTML = user.courses.map(c => `<span class="badge">${c}</span>`).join('');
     }
-});
 
-// Logout functionality
-logoutBtn.addEventListener('click', () => {
-    dashboard.classList.add('hidden');
-    loginScreen.classList.remove('hidden');
-    document.getElementById('email').value = '';
-    document.getElementById('password').value = '';
-    roleBtns[0].classList.add('active');
-    roleBtns[1].classList.remove('active');
-});
+    // Load Activity Log
+    const activities = await ApiService.getFacultyActivity();
+    const timeline = document.getElementById('facultyActivityLog');
+    if (timeline) {
+        timeline.innerHTML = activities.map(item => `
+            <div class="timeline-item">
+                <div class="time-stamp">${item.time}</div>
+                <div class="activity-text">${item.text}</div>
+            </div>
+        `).join('');
+    }
+}
 
 
+// --- Sidebar / Navbar Navigation Logic ---
+const navItems = document.querySelectorAll('.nav-item');
 
-// ... (Rest of code)
-
-// Navigation
 navItems.forEach(item => {
     item.addEventListener('click', (e) => {
         e.preventDefault();
 
-        // Update active nav item
-        navItems.forEach(i => i.classList.remove('active'));
+        // Remove active class from all
+        navItems.forEach(nav => nav.classList.remove('active'));
         item.classList.add('active');
 
-        // Show correct view
-        hideAllViews();
-        const view = item.dataset.view;
-        const targetView = document.getElementById(`${view}View`);
-        if (targetView) {
-            targetView.classList.remove('hidden');
-        }
+        // Handle View Switching
+        const viewId = item.getAttribute('data-view');
 
-        // Hide instructor panel if student tries to access it manually (safeguard)
-        if (view === 'instructor' && currentUser.role !== 'faculty') {
+        // Special case: Profile link needs to route based on Role
+        if (viewId === 'profile') {
             hideAllViews();
-            document.getElementById('dashboardView').classList.remove('hidden');
-
-            navItems.forEach(i => i.classList.remove('active'));
-            navItems[0].classList.add('active'); // Back to dashboard
+            if (currentUser && currentUser.role === 'faculty') {
+                document.getElementById('facultyProfileView').classList.remove('hidden');
+                populateFacultyProfile(currentUser);
+            } else {
+                document.getElementById('studentProfileView').classList.remove('hidden');
+                updateUserProfileUI(currentUser);
+            }
+        }
+        // Standard View Switching
+        else if (viewId) {
+            const targetView = viewId + 'View'; // e.g., 'dashboard' -> 'dashboardView'
+            hideAllViews();
+            const el = document.getElementById(targetView);
+            if (el) el.classList.remove('hidden');
         }
     });
 });
 
-// Lab actions
-document.getElementById('submitLab')?.addEventListener('click', () => {
-    alert('Lab submitted for grading!');
-});
+// Logout functionality
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentUser = null; // Clear user state
+        hideAllViews();
+        if (loginScreen) loginScreen.classList.remove('hidden'); // Show login screen
+        document.getElementById('dashboard').classList.add('hidden'); // Hide Main Wrapper
+        document.querySelector('.top-nav').classList.add('hidden'); // Hide dashboard nav
 
-document.getElementById('saveLab')?.addEventListener('click', () => {
-    alert('Progress saved!');
-});
+        // Reset login form fields
+        if (document.getElementById('studentEmail')) document.getElementById('studentEmail').value = '';
+        if (document.getElementById('studentPass')) document.getElementById('studentPass').value = '';
+        if (document.getElementById('facultyId')) document.getElementById('facultyId').value = '';
+        if (document.getElementById('accessCode')) document.getElementById('accessCode').value = '';
 
-document.getElementById('resetLab')?.addEventListener('click', () => {
-    if (confirm('Reset all progress in this lab?')) {
-        initTerminal();
-    }
-});
+        // Reset role buttons
+        roleBtns.forEach(b => b.classList.remove('active'));
+        const studentBtn = document.querySelector('.role-btn[data-role="student"]');
+        if (studentBtn) studentBtn.classList.add('active');
+        selectedRole = 'student';
 
-// Profile save
-document.getElementById('saveProfile')?.addEventListener('click', () => {
-    alert('Profile updated successfully!');
-});
-
-// Initialize on load
-window.addEventListener('DOMContentLoaded', () => {
-    initTerminal();
-    initStudentPerformance();
-});
-
-/* ===== LAB FEATURES JS ===== */
-
-// 1. Case Header Logic
-function generateCaseID() {
-    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let id = 'CASE-';
-    for (let i = 0; i < 4; i++) {
-        id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-}
-
-// 2. Tool Status Logic
-const forensicTools = [
-    { name: 'Network Sniffer', status: 'idle' },
-    { name: 'Hex Editor', status: 'running' },
-    { name: 'Hash Calculator', status: 'idle' },
-    { name: 'Metadata Viewer', status: 'completed' }
-];
-
-function renderToolList() {
-    const list = document.getElementById('toolList');
-    if (!list) return;
-
-    list.innerHTML = forensicTools.map(tool => `
-        <div class="tool-item">
-            <div class="tool-name">${tool.name}</div>
-            <div class="tool-status status-${tool.status}">${tool.status}</div>
-        </div>
-    `).join('');
-}
-
-// 3. Evidence Upload Simulation
-const uploadBtn = document.getElementById('uploadEvidenceBtn');
-const evidencePanel = document.getElementById('evidencePanel');
-
-if (uploadBtn) {
-    uploadBtn.addEventListener('click', () => {
-        // Change button state
-        const originalText = uploadBtn.innerHTML;
-        uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-        uploadBtn.disabled = true;
-
-        // Simulate network delay
-        setTimeout(() => {
-            // Restore button
-            uploadBtn.innerHTML = '<i class="fas fa-check"></i> Uploaded';
-            uploadBtn.classList.remove('btn-outline');
-            uploadBtn.classList.add('btn'); // Make it solid primary
-
-            // Show panel
-            if (evidencePanel) {
-                evidencePanel.classList.remove('hidden');
-
-                // Simulate hash calculation
-                const hashParams = "LOADING...";
-                document.getElementById('evidenceHash').textContent = hashParams;
-
-                setTimeout(() => {
-                    document.getElementById('evidenceHash').textContent = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-                }, 1500);
-            }
-        }, 1500);
+        // Reset Inputs visibility
+        if (studentInputs) studentInputs.classList.remove('hidden');
+        if (facultyInputs) facultyInputs.classList.add('hidden');
     });
 }
 
-// Initialize Lab Features when switching to Lab View
-// We hook into the existing nav click listener logic by adding a check
-// or simply run this on init if we are on the page. 
-// For now, let's run generating ID on load.
+// --- Lab & Scenario Logic ---
 
-window.addEventListener('DOMContentLoaded', () => {
-    const caseIdEl = document.getElementById('caseId');
-    if (caseIdEl) {
-        caseIdEl.textContent = "ID: " + generateCaseID();
+// Helper: Generate Random Case ID
+function generateCaseID() {
+    return 'CS-' + Math.floor(1000 + Math.random() * 9000);
+}
+
+// Initialize terminal content
+function initTerminal() {
+    const terminalOutput = document.getElementById('terminalOutput');
+    if (!terminalOutput) return;
+
+    terminalOutput.innerHTML = `
+        <div>> INITIALIZING FORENSIC WORKSTATION...</div>
+        <div>> MOUNTING EVIDENCE DRIVES... [OK]</div>
+        <div>> LOADING ANALYSIS MODULES... [OK]</div>
+        <div class="output">Ready. Type 'help' for available commands.</div>
+        <div class="output"></div>
+    `;
+}
+
+// --- UI Interaction Handlers (Modals, Buttons) ---
+
+// Profile Edit Logic (Generic for Student/Faculty)
+function setupEditToggle(editBtnId, saveBtnId, inputIds) {
+    const editBtn = document.getElementById(editBtnId);
+    const saveBtn = document.getElementById(saveBtnId);
+
+    if (editBtn && saveBtn) {
+        editBtn.addEventListener('click', () => {
+            // Un-disable inputs
+            inputIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.removeAttribute('disabled');
+            });
+            editBtn.classList.add('hidden');
+            saveBtn.classList.remove('hidden');
+        });
+
+        saveBtn.addEventListener('click', () => {
+            // Disable inputs again
+            inputIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.setAttribute('disabled', 'true');
+            });
+            editBtn.classList.remove('hidden');
+            saveBtn.classList.add('hidden');
+            alert("Profile updated successfully!"); // Simulation
+        });
     }
-    renderToolList();
+}
+
+// Setup Student Edit
+setupEditToggle('editProfileBtn', 'saveProfileBtn', ['profileName', 'profileEmail']);
+// Setup Faculty Edit
+setupEditToggle('editFacProfile', 'saveFacProfile', ['facName', 'facDept', 'facExpertise']);
+
+// Scenario Modal Logic
+const modal = document.getElementById('scenarioModal');
+const openModalBtn = document.getElementById('openScenarioModal');
+const closeModalBtn = document.querySelector('.close-modal');
+const cancelBtn = document.getElementById('cancelScenario');
+const confirmBtn = document.getElementById('confirmScenario');
+
+function toggleModal(show) {
+    if (show && modal) modal.classList.remove('hidden');
+    else if (modal) modal.classList.add('hidden');
+}
+
+if (openModalBtn) openModalBtn.addEventListener('click', () => toggleModal(true));
+if (closeModalBtn) closeModalBtn.addEventListener('click', () => toggleModal(false));
+if (cancelBtn) cancelBtn.addEventListener('click', () => toggleModal(false));
+
+if (confirmBtn) {
+    confirmBtn.addEventListener('click', () => {
+        alert("New scenario created successfully!");
+        toggleModal(false);
+    });
+}
+
+// --- Frontend Polish Features ---
+
+// 1. Dynamic Scenario Loading
+const startLabBtns = document.querySelectorAll('.start-lab-btn');
+
+startLabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const title = btn.getAttribute('data-title') || "Unknown Lab";
+        const desc = btn.getAttribute('data-desc') || "No description loaded.";
+
+        // Populate Lab View
+        const caseTitleInput = document.getElementById('caseTitle');
+        const missionText = document.getElementById('missionText');
+
+        if (caseTitleInput) caseTitleInput.value = title;
+        if (missionText) missionText.textContent = desc;
+
+        // Generate new Case ID
+        const caseIdEl = document.getElementById('caseId');
+        if (caseIdEl) caseIdEl.textContent = "ID: " + generateCaseID();
+
+        // Switch View
+        hideAllViews();
+        document.getElementById('labsView').classList.remove('hidden');
+
+        // Update Nav
+        navItems.forEach(i => i.classList.remove('active'));
+        const labNav = document.querySelector('[data-view="labs"]');
+        if (labNav) labNav.classList.add('active');
+
+        // Reset Terminal
+        initTerminal();
+        if (document.getElementById('terminalOutput')) {
+            const terminalOutput = document.getElementById('terminalOutput');
+            terminalOutput.innerHTML += `<div>> CASE INITIALIZED: ${title}</div>`;
+            terminalOutput.innerHTML += `<div>> LOADING MISSION PARAMETERS... [OK]</div>`;
+        }
+    });
 });
+
+// 2. Notification Center
+const notifBtn = document.getElementById('notificationBtn');
+const notifDropdown = document.getElementById('notificationDropdown');
+
+if (notifBtn && notifDropdown) {
+    notifBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent closing immediately
+        notifDropdown.classList.toggle('hidden');
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
+            notifDropdown.classList.add('hidden');
+        }
+    });
+}
+
+// 3. Settings Modal
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsModal = document.getElementById('settingsModal');
+const closeSettingsBtn = document.getElementById('closeSettingsModal');
+const saveSettingsBtn = document.getElementById('saveSettings');
+
+function toggleSettingsModal(show) {
+    if (show && settingsModal) settingsModal.classList.remove('hidden');
+    else if (settingsModal) settingsModal.classList.add('hidden');
+}
+
+if (settingsBtn) settingsBtn.addEventListener('click', () => toggleSettingsModal(true));
+if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', () => toggleSettingsModal(false));
+if (saveSettingsBtn) {
+    saveSettingsBtn.addEventListener('click', () => {
+        toggleSettingsModal(false);
+        alert("Preferences saved. (Visual demo)");
+    });
+}
+
+
+// --- Broadcast Announcement Logic ---
+const broadcastModal = document.getElementById('broadcastModal');
+const openBroadcastBtn = document.getElementById('openBroadcastModal');
+const closeBroadcastBtn = document.getElementById('closeBroadcastModal');
+const cancelBroadcastBtn = document.getElementById('cancelBroadcast');
+const sendBroadcastBtn = document.getElementById('sendBroadcast');
+
+function toggleBroadcastModal(show) {
+    if (show && broadcastModal) broadcastModal.classList.remove('hidden');
+    else if (broadcastModal) broadcastModal.classList.add('hidden');
+}
+
+if (openBroadcastBtn) openBroadcastBtn.addEventListener('click', () => toggleBroadcastModal(true));
+if (closeBroadcastBtn) closeBroadcastBtn.addEventListener('click', () => toggleBroadcastModal(false));
+if (cancelBroadcastBtn) cancelBroadcastBtn.addEventListener('click', () => toggleBroadcastModal(false));
+
+if (sendBroadcastBtn) {
+    sendBroadcastBtn.addEventListener('click', () => {
+        const subject = document.getElementById('broadcastSubject').value;
+        const recipients = document.getElementById('broadcastRecipients').value;
+
+        if (subject) {
+            let count = recipients === 'all' ? 42 : (recipients === 'cs401' ? 24 : 18);
+            alert(`Announcement "${subject}" sent to ${count} students successfully.`);
+            toggleBroadcastModal(false);
+            // reset form
+            document.getElementById('broadcastSubject').value = '';
+            document.getElementById('broadcastMessage').value = '';
+        } else {
+            alert("Please enter a subject line.");
+        }
+    });
+}
