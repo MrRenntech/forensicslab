@@ -1,36 +1,50 @@
 # Changelog
 
-All notable changes to the "ForensicLab" project will be documented in this file.
+All notable changes to the **ForensicLab** project will be documented in this file.
 
-## [2.0.0] - 2025-12-15
+## [1.0.0] - 2025-12-15
 
 ### Added
-- **Vercel Serverless Backend**: Created `/api` directory with serverless functions for `login`, `stats`, `students`, and `activity`.
-- **API Service Layer**: `api.service.js` introduced to handle data fetching, with automatic fallback to mock data when running locally (`file://`).
-- **Faculty Dashboard**: Full dashboard implementation including:
-    - Analytics Cards (Total Students, Avg Score, Alerts).
-    - Student Performance Data Table.
-    - "Broadcast Announcement" Modal.
-    - "Create Scenario" Modal.
-- **Faculty Profile**: Detailed profile view with Expertise, Current Courses, and Activity Log.
-- **Dynamic Scenarios**: "Start Lab" button now dynamically loads mission details based on the selected scenario.
-- **UI Enhancements**:
-    - Notification Center (Bell icon + Dropdown).
-    - Settings Modal (Preferences).
-    - Mission Info Panel in Lab Workspace.
-    - High-quality, Audi-themed background images and thumbnails.
+- **MongoDB Integration**:
+  - Replaced static mock data with a real **MongoDB Atlas** database.
+  - Added `mongoose` models for `User`, `Scenario`, and `Submission`.
+  - Added `scripts/seed.js` to populate the database with initial users and scenarios.
+- **Interactive Terminal**:
+  - Implemented a functional CLI in the browser.
+  - Supported commands: `help`, `ls`, `clear`, `analyze`, `submit`.
+  - Added real-time typing feedback and scroll-to-bottom logic.
+- **Submission System**:
+  - `POST /api/submissions`: Endpoint for students to submit lab work.
+  - Linked terminal `submit` command to the backend API.
+- **Instructor Grading**:
+  - `PUT /api/submissions`: Endpoint for faculty to grade submissions.
+  - Added **Grade** button to the Faculty Dashboard table.
+  - Real-time status updates (In Progress -> Submitted -> Graded).
+- **Dynamic Scenarios**:
+  - Scenarios are now fetched dynamically from the database via `/api/scenarios`.
+  - Implemented "Create Scenario" modal for instructors to add new labs.
+- **UI/UX Enhancements**:
+  - **Top Navigation**: Switched to CSS Grid for perfect centering of buttons.
+  - **Dark Mode**: Refined contrast (White text on Black) for better readability.
+  - **Grouping**: Consolidated all navigation links (Dashboard, Scenarios, Labs, Profile) into the center block.
 
-### Updated
-- **Authentication Flow**: Completely refactored `index.html` and `script.js` to support role-based login (Student vs. Faculty) with proper view routing.
-- **Top Navigation**: Replaced the sidebar with a sleek, sticky top navigation bar.
-- **Project Structure**: Organized code into `api/` (backend) and root (frontend). Added `package.json` for Node.js compatibility.
-- **Error Handling**: Implemented robust error catching in `script.js` to prevent UI crashes and silenced generic alerts for a smoother UX.
-- **Code Documentation**: Added comprehensive comments throughout `script.js`.
-
-### Removed
-- **Hardcoded Data**: Removed all static dummy data from `index.html`. The UI now populates dynamically via JavaScript.
-- **Legacy Sidebar**: Removed old sidebar HTML and CSS in favor of the new top navigation.
+### Changed
+- **Local Development**:
+  - Switched from Vercel CLI to a custom `server.js` (Express) for stable local testing.
+  - Wired all `/api/*` routes manually in `server.js`.
+- **Frontend Architecture**:
+  - Refactored `script.js` to use `ApiService` for all data fetching.
+  - Added `activeScenarioId` state tracking to link Terminal actions to specific labs.
 
 ### Fixed
-- **Login Blinking**: Fixed an issue where the dashboard layout was hidden incorrectly on login/logout.
-- **CORS Errors**: Fixed pseudo-CORS errors in local development by detecting the `file:` protocol.
+- **Navigation Alignment**: Fixed off-center buttons by using `grid-template-columns: 1fr auto 1fr`.
+- **Contrast Issues**: Fixed invisible text in the top navigation bar.
+- **Login Glitches**: Resolved "blank screen" issues by correctly hiding/showing view containers.
+
+## [0.1.0] - 2025-12-14
+
+### Initial Release
+- Basic HTML/CSS structure (Audi-inspired dark theme).
+- Static "Mock" data for scenarios and student stats.
+- Basic Login UI (Role selection: Student/Faculty).
+- Placeholder "Tools" and "Analysis" views.

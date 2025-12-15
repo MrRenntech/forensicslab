@@ -1,8 +1,32 @@
-export default function handler(req, res) {
-    res.status(200).json([
-        { time: 'Today, 09:41 AM', text: 'Graded "Phishing Lab" for 3 students' },
-        { time: 'Yesterday, 02:15 PM', text: 'Created new scenario: "Ransomware Analysis"' },
-        { time: 'Dec 12, 11:00 AM', text: 'Updated course syllabus for CS-405' },
-        { time: 'Dec 10, 04:30 PM', text: 'System Maintenance: Server Restart' }
-    ]);
+import dbConnect from '../lib/dbConnect.js';
+import Submission from '../models/Submission.js';
+
+export default async function handler(req, res) {
+    await dbConnect();
+
+    try {
+        // Fetch recent graded submissions to mimic activity
+        const recentSubs = await Submission.find({ status: 'Graded' })
+            .sort({ updatedAt: -1 })
+            .limit(5)
+            .populate('student', 'name')
+            .populate('scenario', 'title');
+
+        const activities = recentSubs.map(sub => ({
+            time: new Date(sub.updatedAt).toLocaleDateString(),
+            text: `Graded "${sub.scenario.title}" for ${sub.student.name}`
+        }));
+
+        // Add some filler if empty (since it's a demo)
+        if (activities.length < 3) {
+            activities.push(
+                { time: 'Today', text: 'System Maintenance: Security Patch Applied' },
+                { time: 'Yesterday', text: 'Updated Course Material for CS-401' }
+            );
+        }
+
+        res.status(200).json(activities);
+    } catch (error) {
+        res.status(500).json([]);
+    }
 }

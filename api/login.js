@@ -1,34 +1,39 @@
-export default function handler(req, res) {
-    // In a real app, you would parse req.body and validate credentials against a database
-    // const { role, email, password } = req.body;
+import dbConnect from '../lib/dbConnect.js';
+import User from '../models/User.js';
 
-    // For now, we return mock data based on the 'role' query param or body
-    const role = req.query.role || (req.body && req.body.role) || 'student';
+export default async function handler(req, res) {
+    const { role } = req.query;
 
-    if (role === 'student') {
-        res.status(200).json({
+    await dbConnect();
+
+    try {
+        let user;
+        if (role === 'student') {
+            user = await User.findOne({ email: 'alex.johnson@example.com' });
+        } else {
+            user = await User.findOne({ email: 's.connor@cyber.edu' });
+        }
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found. Please run seed script." });
+        }
+
+        return res.status(200).json({
             success: true,
             user: {
-                id: 'S-101',
-                name: "Alex Johnson",
-                role: "student",
-                email: "alex.johnson@example.com",
-                avatar: "AJ"
+                id: user.universityId,
+                name: user.name,
+                role: user.role,
+                email: user.email,
+                avatar: user.avatar,
+                // Include other fields if they exist
+                department: user.department,
+                expertise: user.expertise,
+                courses: user.coursesTaught || user.enrolledCourses
             }
         });
-    } else {
-        res.status(200).json({
-            success: true,
-            user: {
-                id: 'F-909',
-                name: "Dr. Sarah Connor",
-                role: "faculty",
-                email: "s.connor@cyber.edu",
-                avatar: "SC",
-                department: "Computer Science / Forensics",
-                expertise: "Malware Analysis, Network Security",
-                courses: ["CS-401", "CS-405", "CYB-501"]
-            }
-        });
+    } catch (error) {
+        console.error("Login API Error:", error);
+        return res.status(500).json({ success: false, message: "Database Error" });
     }
 }

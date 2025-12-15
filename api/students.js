@@ -1,9 +1,22 @@
-export default function handler(req, res) {
-    res.status(200).json([
-        { name: "John Doe", id: "S101", completed: 5, score: 92, status: "Active" },
-        { name: "Jane Smith", id: "S102", completed: 4, score: 88, status: "Active" },
-        { name: "Michael Brown", id: "S103", completed: 2, score: 75, status: "Warning" },
-        { name: "Emily Davis", id: "S104", completed: 6, score: 98, status: "Active" },
-        { name: "Chris Wilson", id: "S105", completed: 0, score: 0, status: "Inactive" }
-    ]);
+import dbConnect from '../lib/dbConnect.js';
+import User from '../models/User.js';
+
+export default async function handler(req, res) {
+    await dbConnect();
+
+    try {
+        const students = await User.find({ role: 'student' }).select('name universityId stats role');
+
+        const data = students.map(s => ({
+            name: s.name,
+            id: s.universityId,
+            completed: s.stats ? s.stats.labsCompleted : 0,
+            score: s.stats ? s.stats.avgScore : 0,
+            status: "Active" // Default status
+        }));
+
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json([]);
+    }
 }

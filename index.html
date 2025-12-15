@@ -74,21 +74,22 @@
                 <a href="#" class="nav-item student-only" data-view="labs">
                     <i class="fas fa-flask"></i> <span>Analysis Labs</span>
                 </a>
-                <a href="#" class="nav-item instructor-only hidden" data-view="instructor">
-                    <i class="fas fa-chalkboard-teacher"></i> <span>Instructor Panel</span>
-                </a>
-            </div>
-
-            <div class="nav-right">
                 <a href="#" class="nav-item student-only" data-view="studentProfile">
                     <i class="fas fa-user"></i> <span>Profile</span>
+                </a>
+                <!-- Faculty Links -->
+                <a href="#" class="nav-item instructor-only hidden" data-view="instructor">
+                    <i class="fas fa-chalkboard-teacher"></i> <span>Instructor Panel</span>
                 </a>
                 <a href="#" class="nav-item instructor-only hidden" data-view="facultyProfile">
                     <i class="fas fa-user-tie"></i> <span>My Profile</span>
                 </a>
-                <div class="user-info-text" style="text-align: right; margin-right: 15px; color: var(--text-color);">
-                    <div id="userName" style="font-weight: bold; font-size: 0.9rem;">Guest User</div>
-                    <div id="userRoleDisplay" style="font-size: 0.8rem; color: var(--text-muted);">Please Login</div>
+            </div>
+
+            <div class="nav-right">
+                <div class="user-info-text">
+                    <div id="userName" class="user-name-display">Guest User</div>
+                    <div id="userRoleDisplay" class="user-role-display">Please Login</div>
                 </div>
                 <div class="user-info-mini">
                     <div class="user-avatar">AJ</div>
@@ -219,125 +220,10 @@
             <div id="scenariosView" class="hidden">
                 <h2>Forensic Scenarios</h2>
                 <p>Real-world cybersecurity incidents to investigate</p>
-                <div class="scenario-grid" style="margin-top: 20px;">
-                    <div class="scenario-card">
-                        <div class="scenario-thumb">
-                            <img src="assets/images/network_thumb.png" alt="Data Breach">
-                        </div>
-                        <div class="scenario-header">
-                            <h3 class="scenario-title">Data Breach Investigation</h3>
-                            <span class="scenario-difficulty">Advanced</span>
-                        </div>
-                        <div class="scenario-content">
-                            <p class="scenario-description">Analyze logs from a simulated data breach to identify
-                                compromised data, attack vectors, and exfiltration methods.</p>
-                            <div class="scenario-actions">
-                                <button class="btn-outline" data-title="Data Breach Investigation"
-                                    data-desc="Objective: Map the attacker's lateral movement and identify the exfiltration point.">Start
-                                    Lab</button>
-                                <button class="btn-outline btn-danger">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="scenario-card">
-                        <div class="scenario-thumb">
-                            <img src="assets/images/malware_thumb.png" alt="Ransomware">
-                        </div>
-                        <div class="scenario-header">
-                            <h3 class="scenario-title">Ransomware Analysis</h3>
-                            <span class="scenario-difficulty">Expert</span>
-                        </div>
-                        <div class="scenario-content">
-                            <p class="scenario-description">Investigate a ransomware attack, analyze encrypted files,
-                                and attempt recovery without paying the ransom.</p>
-                            <div class="scenario-actions">
-                                <button class="btn-outline" data-title="Ransomware Reverse Engineering"
-                                    data-desc="Objective: Analyze the binary structure to find the hardcoded kill-switch domain.">Start
-                                    Lab</button>
-                                <button class="btn-outline btn-danger">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="scenario-card">
-                        <div class="scenario-thumb">
-                            <img src="assets/images/network_thumb.png" alt="Network Traffic">
-                        </div>
-                        <div class="scenario-header">
-                            <h3 class="scenario-title">Network Traffic Analysis</h3>
-                            <span class="scenario-difficulty">Intermediate</span>
-                        </div>
-                        <div class="scenario-content">
-                            <p class="scenario-description">Examine captured network traffic to identify
-                                command-and-control communications and data exfiltration.</p>
-                            <div class="scenario-actions">
-                                <button class="btn-outline" data-title="Network Traffic Analysis"
-                                    data-desc="Objective: Filter PCAP traffic to isolate Command & Control heartbeat packets.">Start
-                                    Lab</button>
-                                <button class="btn-outline btn-danger">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="scenario-card">
-                        <div class="scenario-thumb">
-                            <img src="assets/images/sql_thumb.png" alt="SQL Injection">
-                        </div>
-                        <div class="scenario-header">
-                            <h3 class="scenario-title">SQL Injection Analysis</h3>
-                            <span class="scenario-difficulty">Intermediate</span>
-                        </div>
-                        <div class="scenario-content">
-                            <p class="scenario-description">Analyze web server logs to identify SQL manipulation
-                                patterns and determine the extent of database compromise.</p>
-                            <div class="scenario-actions">
-                                <button class="btn-outline" data-title="SQL Injection Forensics"
-                                    data-desc="Objective: Reconstruct the attacker's SQL queries from the server access logs.">Start
-                                    Lab</button>
-                                <button class="btn-outline btn-danger">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="scenario-card">
-                        <div class="scenario-thumb">
-                            <img src="assets/images/memory_thumb.png" alt="Memory Forensics">
-                        </div>
-                        <div class="scenario-header">
-                            <h3 class="scenario-title">Memory Dump Forensics</h3>
-                            <span class="scenario-difficulty">Expert</span>
-                        </div>
-                        <div class="scenario-content">
-                            <p class="scenario-description">Analyze a raw RAM dump to extract artifacts, find hidden
-                                processes, and identify injected malicious code.</p>
-                            <div class="scenario-actions">
-                                <button class="btn-outline" data-title="Memory Dump Forensics"
-                                    data-desc="Objective: Use Volatility to extract the hidden rootkit process from the RAM dump.">Start
-                                    Lab</button>
-                                <button class="btn-outline btn-danger">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="scenario-card">
-                        <div class="scenario-thumb">
-                            <img src="assets/images/insider_thumb.png" alt="Insider Threat">
-                        </div>
-                        <div class="scenario-header">
-                            <h3 class="scenario-title">Insider Threat Detection</h3>
-                            <span class="scenario-difficulty">Advanced</span>
-                        </div>
-                        <div class="scenario-content">
-                            <p class="scenario-description">Investigate an employee's activity logs, file access
-                                history, and communication to detect unauthorized data exfiltration.</p>
-                            <div class="scenario-actions">
-                                <button class="btn-outline" data-title="Insider Threat Detection"
-                                    data-desc="Objective: Correlate badge access logs with file server downloads to prove data theft.">Start
-                                    Lab</button>
-                                <button class="btn-outline btn-danger">Reset</button>
-                            </div>
-                        </div>
+                <div class="scenario-grid" style="margin-top: 20px;" id="scenariosContainer">
+                    <!-- Dynamically populated by script.js -->
+                    <div style="text-align: center; color: #888; grid-column: span 3;">
+                        <i class="fas fa-circle-notch fa-spin"></i> Loading Scenarios...
                     </div>
                 </div>
             </div>
@@ -367,6 +253,11 @@
                         <div class="terminal">
                             <div class="terminal-content" id="terminalOutput">
                                 <!-- Dynamically populated by JS -->
+                            </div>
+                            <div class="terminal-input-line">
+                                <span class="prompt">></span>
+                                <input type="text" id="terminalInput" class="terminal-input" placeholder="Type help..."
+                                    autocomplete="off">
                             </div>
                         </div>
                         <div class="lab-actions">
