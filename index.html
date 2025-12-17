@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForensicLab - Cybersecurity Training Platform</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>ForensicLab</h1>
+                <p>Cybersecurity Training Platform</p>
+            </div>
+
+            <div class="role-toggle">
+                <button class="role-btn active" data-role="student">Student</button>
+                <button class="role-btn" data-role="faculty">Faculty</button>
+            </div>
+
+            <!-- Student Inputs -->
+            <div id="studentInputs">
+                <div class="input-group">
+                    <label for="studentEmail">Student Email</label>
+                    <input type="email" id="studentEmail" placeholder="student@university.edu"
+                        value="alex.johnson@university.edu">
+                </div>
+                <div class="input-group">
+                    <label for="studentPass">Password</label>
+                    <input type="password" id="studentPass" placeholder="••••••••" value="password123">
+                </div>
+            </div>
+
+            <!-- Faculty Inputs (Hidden by default) -->
+            <div id="facultyInputs" class="hidden">
+                <div class="input-group">
+                    <label for="facultyId">Faculty ID</label>
+                    <input type="text" id="facultyId" placeholder="FAC-XXXX" value="FAC-9921">
+                </div>
+                <div class="input-group">
+                    <label for="accessCode">Access Code</label>
+                    <input type="password" id="accessCode" placeholder="Access Token" value="admin123">
+                </div>
+            </div>
+
+            <button class="btn" id="loginBtn">Access Portal</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="container hidden">
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo">
+                    <div class="logo-text">ForensicLab</div>
+                </div>
+            </div>
+
+            <div class="nav-center">
+                <a href="#" class="nav-item student-only active" data-view="dashboard">
+                    <i class="fas fa-home"></i> <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item student-only" data-view="scenarios">
+                    <i class="fas fa-virus"></i> <span>Scenarios</span>
+                </a>
+                <a href="#" class="nav-item student-only" data-view="labs">
+                    <i class="fas fa-flask"></i> <span>Analysis Labs</span>
+                </a>
+                <a href="#" class="nav-item student-only" data-view="studentProfile">
+                    <i class="fas fa-user"></i> <span>Profile</span>
+                </a>
+                <!-- Faculty Links -->
+                <a href="#" class="nav-item instructor-only hidden" data-view="instructor">
+                    <i class="fas fa-chalkboard-teacher"></i> <span>Instructor Panel</span>
+                </a>
+                <a href="#" class="nav-item instructor-only hidden" data-view="facultyProfile">
+                    <i class="fas fa-user-tie"></i> <span>My Profile</span>
+                </a>
+            </div>
+
+            <div class="nav-right">
+                <div class="user-info-text">
+                    <div id="userName" class="user-name-display">Guest User</div>
+                    <div id="userRoleDisplay" class="user-role-display">Please Login</div>
+                </div>
+                <div class="user-info-mini">
+                    <div class="user-avatar">AJ</div>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <!-- Dashboard View -->
+            <!-- Dashboard View -->
+            <div id="dashboardView">
+                <div class="header">
+                    <div class="welcome-text">
+                        <h2>Welcome back, <span id="userName">Alex Johnson</span>!</h2>
+                        <p id="userRoleDisplay">Student Dashboard</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Active Labs</h3>
+                        </div>
+                        <p>You have 3 forensic labs in progress</p>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">In Progress</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">7</div>
+                                <div class="stat-label">Completed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Certifications</h3>
+                        </div>
+                        <p>Track your professional growth</p>
+                        <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                            <span class="status-badge" style="background: var(--text-main);">NetSec Level 1</span>
+                            <span class="status-badge" style="background: gray;">Forensics Associate</span>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">2</div>
+                                <div class="stat-label">Earned</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">1</div>
+                                <div class="stat-label">Pending</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card instructor-only hidden">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="card-title">Student Performance</h3>
+                        </div>
+                        <p>Monitor your class progress</p>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Students</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">82%</div>
+                                <div class="stat-label">Avg. Score</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Recent Scenarios</h3>
+                <div class="scenario-grid">
+                    <div class="scenario-card">
+                        <div class="scenario-thumb">
+                            <img src="assets/images/phishing_thumb.png" alt="Phishing Analysis">
+                        </div>
+                        <div class="scenario-header">
+                            <h3 class="scenario-title">Phishing Attack Analysis</h3>
+                            <span class="scenario-difficulty">Intermediate</span>
+                        </div>
+                        <div class="scenario-content">
+                            <p class="scenario-description">Analyze a simulated phishing email and identify malicious
+                                elements, sender information, and embedded links.</p>
+                            <div class="scenario-actions">
+                                <button class="btn-outline" data-title="Phishing Attack Analysis"
+                                    data-desc="Objective: Analyze suspicious email headers to identify the attacker's origin server and neutralize the payload.">Start
+                                    Lab</button>
+                                <button class="btn-outline btn-danger">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-card">
+                        <div class="scenario-thumb">
+                            <img src="assets/images/malware_thumb.png" alt="Malware Analysis">
+                        </div>
+                        <div class="scenario-header">
+                            <h3 class="scenario-title">Malware Infection Forensics</h3>
+                            <span class="scenario-difficulty">Advanced</span>
+                        </div>
+                        <div class="scenario-content">
+                            <p class="scenario-description">Investigate a system infected with malware, analyze registry
+                                changes, and identify persistence mechanisms.</p>
+                            <div class="scenario-actions">
+                                <button class="btn-outline" data-title="Ransomware Decryption"
+                                    data-desc="Objective: Locate the encryption key within the memory dump and decrypt the hostage files.">Start
+                                    Lab</button>
+                                <button class="btn-outline btn-danger">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of #dashboardView -->
+
+            <!-- Scenarios View -->
+            <div id="scenariosView" class="hidden">
+                <h2>Forensic Scenarios</h2>
+                <p>Real-world cybersecurity incidents to investigate</p>
+                <div class="scenario-grid" style="margin-top: 20px;" id="scenariosContainer">
+                    <!-- Dynamically populated by script.js -->
+                    <div style="text-align: center; color: #888; grid-column: span 3;">
+                        <i class="fas fa-circle-notch fa-spin"></i> Loading Scenarios...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Labs View -->
+            <div id="labsView" class="hidden">
+                <!-- Case Header Component -->
+                <div class="case-header-component">
+                    <div class="case-main-info">
+                        <input type="text" class="case-title-input" value="Phishing Attack Analysis" id="caseTitle">
+                        <div class="case-meta">
+                            <span id="caseId">ID: GENERATING...</span>
+                            <span class="status-badge" id="caseStatus">OPEN</span>
+                        </div>
+                    </div>
+                    <div class="case-actions">
+                        <button class="btn-outline btn-sm" id="uploadEvidenceBtn">
+                            <i class="fas fa-upload"></i> Upload Evidence
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lab Workspace Grid -->
+                <div class="lab-workspace-grid">
+                    <!-- Left Column: Terminal & Work -->
+                    <div class="workspace-main">
+                        <div class="terminal">
+                            <div class="terminal-content" id="terminalOutput">
+                                <!-- Dynamically populated by JS -->
+                            </div>
+                            <div class="terminal-input-line">
+                                <span class="prompt">></span>
+                                <input type="text" id="terminalInput" class="terminal-input" placeholder="Type help..."
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="lab-actions">
+                            <button class="btn" id="submitLab">Submit Case</button>
+                            <button class="btn-outline" id="saveLab">Save</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Tools & Info -->
+                    <div class="workspace-sidebar">
+
+                        <!-- Mission Briefing Panel (NEW) -->
+                        <div class="info-panel mission-panel">
+                            <h3 class="panel-title">Mission Briefing</h3>
+                            <div class="mission-text" id="missionText">
+                                Objective: Analyze suspicious email headers to identify the attacker's origin server.
+                            </div>
+                        </div>
+
+                        <!-- Tool Status Panel -->
+                        <div class="info-panel tool-panel">
+                            <h3 class="panel-title">Forensic Tools</h3>
+                            <div class="tool-list" id="toolList">
+                                <div class="tool-item">
+                                    <div class="tool-name">Network Sniffer</div>
+                                    <div class="tool-status status-idle">Idle</div>
+                                </div>
+                                <div class="tool-item">
+                                    <div class="tool-name">Hex Viewer</div>
+                                    <div class="tool-status status-running">Running</div>
+                                </div>
+                                <div class="tool-item">
+                                    <div class="tool-name">Log Analyzer</div>
+                                    <div class="tool-status status-idle">Idle</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Evidence Metadata Panel (Initially Hidden) -->
+                        <div class="info-panel evidence-panel hidden" id="evidencePanel">
+                            <h3 class="panel-title">Evidence Metadata</h3>
+                            <div class="evidence-card">
+                                <div class="evidence-icon">
+                                    <i class="fas fa-file-code"></i>
+                                </div>
+                                <div class="evidence-details">
+                                    <div class="evidence-name" id="evidenceName">suspicious_email.eml</div>
+                                    <div class="evidence-meta-grid">
+                                        <div class="meta-item">
+                                            <span class="meta-label">Size</span>
+                                            <span class="meta-value" id="evidenceSize">24 KB</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">Type</span>
+                                            <span class="meta-value" id="evidenceType">EML Source</span>
+                                        </div>
+                                    </div>
+                                    <div class="hash-section">
+                                        <span class="meta-label">SHA-256</span>
+                                        <div class="hash-value" id="evidenceHash">LOADING...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructor Panel -->
+            <div id="instructorView" class="hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <h2>Instructor Dashboard</h2>
+                        <p>Manage labs, students, and scenarios</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-outline" id="openBroadcastModal">
+                            <i class="fas fa-bullhorn"></i> Broadcast
+                        </button>
+                        <button class="btn" id="openScenarioModal">
+                            <i class="fas fa-plus"></i> Create Scenario
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Analytics Row -->
+                <div class="analytics-row">
+                    <div class="metric-card">
+                        <div class="metric-title">Total Students</div>
+                        <div class="metric-value" id="statTotalStudents">-</div>
+                        <div class="metric-trend text-success"><i class="fas fa-arrow-up"></i> 12% vs last month</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Avg Lab Score</div>
+                        <div class="metric-value" id="statAvgScore">-%</div>
+                        <div class="metric-trend text-success"><i class="fas fa-arrow-up"></i> 5% vs last week</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Pending Reviews</div>
+                        <div class="metric-value" id="statPendingReviews">-</div>
+                        <div class="metric-trend text-warning"><i class="fas fa-clock"></i> Needs attention</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-title">Active Alerts</div>
+                        <div class="metric-value" id="statActiveAlerts">-</div>
+                        <div class="metric-trend text-danger"><i class="fas fa-exclamation-triangle"></i> Security Flags
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="labSelect">Select Lab</label>
+                        <select id="labSelect">
+                            <option>Phishing Attack Analysis</option>
+                            <option>Data Breach Investigation</option>
+                            <option>Malware Infection Forensics</option>
+                            <option>Ransomware Analysis</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="classSelect">Select Class</label>
+                        <select id="classSelect">
+                            <option>Cybersecurity 101</option>
+                            <option>Advanced Forensics</option>
+                            <option>Digital Evidence</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateFilter">Date Range</label>
+                        <input type="text" id="dateFilter" placeholder="Last 30 days" value="Last 30 days">
+                    </div>
+                </div>
+
+                <h3>Student Performance</h3>
+                <div class="performance-grid" id="studentPerformance">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>ID</th>
+                                <th>Labs Completed</th>
+                                <th>Avg Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Profile View -->
+    <div id="studentProfileView" class="hidden">
+        <h2>My Profile</h2>
+        <div class="card" style="margin-top: 20px;">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="profileName" value="Loading..." disabled>
+            </div>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="profileEmail" value="Loading..." disabled>
+            </div>
+            <div class="input-group">
+                <label>Student ID</label>
+                <input type="text" value="S-10142" disabled>
+            </div>
+            <div class="input-group">
+                <label>Enrolled Class</label>
+                <input type="text" value="CS-401: Network Security" disabled>
+            </div>
+            <div class="profile-actions">
+                <button class="btn-outline" id="editProfileBtn">Edit Profile</button>
+                <button class="btn hidden" id="saveProfileBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Faculty Profile View -->
+    <div id="facultyProfileView" class="hidden">
+        <h2>Instructor Settings</h2>
+        <div class="card" style="margin-top: 20px;">
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Left Col: Details -->
+                <div>
+                    <div class="input-group">
+                        <label>Instructor Name</label>
+                        <input type="text" id="facName" value="Loading..." disabled>
+                    </div>
+                    <div class="input-group">
+                        <label>Department</label>
+                        <input type="text" id="facDept" value="Loading..." disabled>
+                    </div>
+                    <div class="input-group">
+                        <label>Expertise</label>
+                        <input type="text" id="facExpertise" value="Loading..." disabled>
+                    </div>
+                    <div class="input-group">
+                        <label>Clearance Level</label>
+                        <input type="text" value="Level 5 (Admin)" readonly class="text-danger">
+                    </div>
+
+                    <h4 style="margin-top: 20px; margin-bottom: 10px; color: var(--text-muted);">Current Courses
+                    </h4>
+                    <div class="course-badges" id="courseList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Right Col: Activity Log -->
+                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px;">
+                    <h4 style="color: var(--text-muted); margin-bottom: 15px;">Recent Activity Log</h4>
+                    <div class="activity-timeline" id="facultyActivityLog">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-actions" style="margin-top: 20px;">
+                <button class="btn-outline" id="editFacProfile">Edit Profile</button>
+                <button class="btn hidden" id="saveFacProfile">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Scenario Modal -->
+    <div id="scenarioModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Forensic Scenario</h3>
+                <span class="close-modal" id="closeScenarioModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Scenario Title</label>
+                    <input type="text" id="newScenarioTitle" placeholder="e.g. Ransomware Decryption">
+                </div>
+                <div class="input-group">
+                    <label>Difficulty</label>
+                    <select id="newScenarioDifficulty">
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                        <option value="Expert">Expert</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Description</label>
+                    <textarea id="newScenarioDesc" rows="3" placeholder="Brief mission briefing..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" id="cancelScenario">Cancel</button>
+                <button class="btn" id="confirmCreateScenario">Create Scenario</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Broadcast Modal -->
+    <div id="broadcastModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Broadcast Announcement</h3>
+                <span class="close-modal" id="closeBroadcastModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Subject</label>
+                    <input type="text" id="broadcastSubject" placeholder="e.g. Lab Deadline Extended">
+                </div>
+                <div class="input-group">
+                    <label>Recipients</label>
+                    <select id="broadcastRecipients">
+                        <option value="all">All Students</option>
+                        <option value="cs401">CS-401 Breakdown</option>
+                        <option value="cyb501">CYB-501 Advanced</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Message</label>
+                    <textarea id="broadcastMessage" rows="4" placeholder="Type your message here..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" id="cancelBroadcast">Cancel</button>
+                <button class="btn" id="sendBroadcast">Send Announcement</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content" style="width: 400px;">
+            <div class="modal-header">
+                <h3>System Preferences</h3>
+                <span class="close-modal" id="closeSettingsModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="input-group" style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="margin: 0;">High Contrast Mode</label>
+                    <input type="checkbox" id="highContrastToggle">
+                </div>
+                <div class="input-group" style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="margin: 0;">Larger Text</label>
+                    <input type="checkbox" id="largeTextToggle">
+                </div>
+                <div class="input-group">
+                    <label>Terminal Opacity</label>
+                    <input type="range" min="50" max="100" value="90">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="saveSettings">Save Preferences</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="api.service.js"></script>
+    <script src="script.js"></script>
+</body>
+
+
+</html>

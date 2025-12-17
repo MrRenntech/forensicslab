@@ -1,0 +1,15 @@
+{
+    "name": "forensic-lab-platform",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "Educational Cyber Forensic Lab Platform",
+    "main": "index.html",
+    "scripts": {
+        "start": "serve ."
+    },
+    "dependencies": {
+        "dotenv": "^17.2.3",
+        "express": "^5.2.1",
+        "mongoose": "^9.0.1"
+    }
+}
