@@ -1,5 +1,7 @@
 # 🕵️‍♂️ Cyber Forensic LAB
 
+![Cyber Forensic LAB Hero](./assets/images/hero_banner.png)
+
 ![Project Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![Node Version](https://img.shields.io/badge/Node.js-v18%2B-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Data](https://img.shields.io/badge/Database-MongoDB_Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
@@ -29,6 +31,15 @@ Get up and running in 3 steps:
 
 ---
 
+## 📸 Preview
+
+![Dashboard Mockup](./assets/images/ui_mockup.png)
+
+**Immersive Interface**
+The platform features a dark-mode, high-contrast UI designed for long investigation sessions. The central terminal allows for realistic command execution, while the surrounding panels provide real-time data visualization and case management.
+
+---
+
 ## 📚 Documentation
 
 Detailed documentation is available in the [`docs/`](./docs/) directory.
@@ -46,12 +57,6 @@ Detailed documentation is available in the [`docs/`](./docs/) directory.
 *   **Role-Based Portals**: Separate dashboards for Students (Labs) and Faculty (Grading).
 *   **Real-time Feedback**: Instant submission status updates.
 *   **Dark Mode**: Optimized for low-light environments.
-
----
-
-## 📸 Preview
-
-*(Screenshots coming soon)*
 
 ---
 
