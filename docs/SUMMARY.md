@@ -9,6 +9,7 @@ Welcome to the **Cyber Forensic LAB** documentation. Here you will find everythi
 ### 🚀 Getting Started
 *   **[Setup Guide](./SETUP_GUIDE.md)**: Detailed instructions on installing dependencies and configuring the environment.
 *   **[Project Overview](./PROJECT_OVERVIEW.md)**: High-level architecture, technology stack, and core features.
+*   **[Project Structure](./PROJECT_STRUCTURE.md)**: Detailed breakdown of files and folders.
 
 ### 🛠️ Maintenance & Support
 *   **[Troubleshooting](./TROUBLESHOOTING.md)**: Solutions for common errors like port conflicts and database connection issues.

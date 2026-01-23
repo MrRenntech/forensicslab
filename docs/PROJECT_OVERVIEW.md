@@ -1,51 +1,55 @@
-# 🕵️‍♂️ Project Overview - Cyber Forensic LAB
+# 🕵️‍♂️ Project Overview & Architecture
 
-Welcome to the **Cyber Forensic LAB**, an interactive educational platform designed to simulate digital forensic scenarios. This project combines a robust backend with a sleek, terminal-style frontend to provide students and faculty with a realistic environment for learning and grading.
+**Cyber Forensic LAB** is a full-stack educational simulation platform. It is designed to be **lightweight**, **portable**, and **cloud-ready**.
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Technical Architecture
 
-The application follows a classic **Client-Server-Database** architecture, optimized for simplicity and real-time interaction.
+The application uses a **Serverless-First** architecture. This means there is no monolithic backend server code that runs 24/7 in production. Instead, API endpoints are standalone functions.
 
-```mermaid
-graph TD
-    Client[🖥️ Client (Browser)]
-    Server[⚙️ Server (Node.js/Express)]
-    DB[(🗄️ Database (MongoDB Atlas))]
+### 🔄 The "Hybrid" Runtime Approach
 
-    Client -- "HTTP/REST API\n(Fetch)" --> Server
-    Server -- "Mongoose" --> DB
-    DB -- "JSON Data" --> Server
-    Server -- "JSON Responses" --> Client
+One of the unique features of this project is how it handles different environments:
 
-    subgraph Frontend [Frontend Layer]
-    Client
-    end
+| Environment | Strategy | How it works |
+| :--- | :--- | :--- |
+| **Production (Vercel)** | **Serverless** | Vercel takes files in `/api` and deploys them as Lambda functions. `index.html` is served via CDN. |
+| **Development (Local)** | **Express.js** | We use `server.js` to create a standard Node.js server. It manually "wires up" the files in `/api` to Express routes (e.g., `app.get('/api/login', loginHandler)`). |
 
-    subgraph Backend [Backend Layer]
-    Server
-    end
+**Why do this?**
+*   It allows us to develop locally without internet or Vercel CLI tools.
+*   It keeps the production deployment cost near zero (Serverless).
+*   It ensures the code is modular and decoupled.
 
-    subgraph Data [Data Layer]
-    DB
-    end
-```
+---
 
-### 🧩 Core Components
+## 🧩 Component Deep Dive
 
-1.  **Frontend (Vanilla JS + CSS)**
-    *   **No Frameworks:** Built with pure HTML5, CSS3, and JavaScript (ES6 modules) for maximum performance and understanding of fundamentals.
-    *   **Interactive Terminal:** A custom-built CLI interface running in the browser that mimics real Linux terminals.
-    *   **Dynamic UI:** Uses simple DOM manipulation to switch views (Login, Dashboard, Labs).
+### 1. The Frontend (`index.html` + `script.js`)
+*   **SPA (Single Page Application)**: The page never reloads. We use JavaScript to hide/show `<div>` containers based on the current "Route" (Login vs Dashboard).
+*   **Terminal Emulator**: The black box in the center of the screen isn't just a text box. It captures `keydown` events, parses the `Input String`, matches it against a `Command Registry` (in `script.js`), and renders HTML responses.
+    *   *Example*: Typing `analyze file.enc` triggers a visual loading bar and then calls the backend if needed.
 
-2.  **Backend (Node.js + Express)**
-    *   **API Layer:** RESTful endpoints for authentication, scenario fetching, and submission handling.
-    *   **Environment:** Runs on a custom Express server (`server.js`) for local stability.
+### 2. The Data Layer
+*   **MongoDB Atlas**: We use a cloud-hosted MongoDB instance.
+*   **Mongoose**: We use Mongoose for schema validation. This ensures a Student cannot be saved without a `universityId`, and a Submission must link to a valid `User`.
 
-3.  **Database (MongoDB Atlas)**
-    *   **Data Models:** Mongoose schemas for `Users`, `Scenarios`, and `Submissions`.
-    *   **Cloud Native:** Hosted on MongoDB Atlas for accessibility from anywhere.
+---
+
+## 🚀 Workflow Lifecycle
+
+1.  **Boot**: User opens the app. `script.js` checks for a stored Session Token.
+2.  **Login**: User enters credentials.
+    *   Frontend sends `GET /api/login?email=...`
+    *   Backend verifies user in DB.
+3.  **Simulation**: User enters the "Lab".
+    *   `script.js` listens for commands.
+    *   User types `submit flag{123}`.
+4.  **Submission**:
+    *   Frontend sends `POST /api/submissions`.
+    *   Backend creates a `Submission` document.
+    *   Socket/Polling updates the Faculty Dashboard instantly.
 
 ---
 
@@ -54,16 +58,7 @@ graph TD
 | Category | Technology | Usage |
 | :--- | :--- | :--- |
 | **Runtime** | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white) | Server-side execution environment. |
-| **Framework** | ![Express](https://img.shields.io/badge/Express.js-000000?style=flat&logo=express&logoColor=white) | Web server framework for handling API routes. |
+| **Framework** | ![Express](https://img.shields.io/badge/Express.js-000000?style=flat&logo=express&logoColor=white) | Web server framework (Local Dev). |
 | **Database** | ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white) | NoSQL database for flexible data storage. |
 | **ODM** | ![Mongoose](https://img.shields.io/badge/Mongoose-880000?style=flat&logo=mongoose&logoColor=white) | Object Data Modeling library for MongoDB. |
 | **Frontend** | ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black) | Pure web technologies for the user interface. |
-
----
-
-## ✨ Key Features
-
-*   **🔐 Role-Based Access Control:** Distinct portals for Students (Lab execution) and Faculty (Grading & Scenario Management).
-*   **💻 In-Browser Terminal:** Execute forensic commands like `analyze`, `decrypt`, and `submit` directly in the web interface.
-*   **📊 Real-Time Grading:** Instant feedback loop between student submissions and faculty grading.
-*   **🌓 Dark Mode UI:** "Audi-inspired" aesthetic with deep blacks and vibrant accents for reduced eye strain during long coding sessions.

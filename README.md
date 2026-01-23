@@ -45,6 +45,7 @@ The platform features a dark-mode, high-contrast UI designed for long investigat
 Detailed documentation is available in the [`docs/`](./docs/) directory.
 
 *   📖 **[Project Overview](./docs/PROJECT_OVERVIEW.md)** - Architecture & Tech Stack.
+*   📂 **[Project Structure](./docs/PROJECT_STRUCTURE.md)** - File & folder breakdown.
 *   🛠️ **[Setup Guide](./docs/SETUP_GUIDE.md)** - Step-by-step installation instructions.
 *   🐛 **[Troubleshooting](./docs/TROUBLESHOOTING.md)** - Common errors and fixes.
 *   📝 **[Changelog](./CHANGELOG.md)** - Version history and updates.
